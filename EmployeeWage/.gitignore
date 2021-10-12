@@ -1,0 +1,9 @@
+./
+../
+../../
+EmpWageUC1/
+bin/
+bin/Debug/
+obj/
+obj/Debug/
+.vs/
