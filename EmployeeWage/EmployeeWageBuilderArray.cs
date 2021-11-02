@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace EmployeeWage
 {
+    //Interface
     public interface IComputeEmpWage
     {
         public void addCompanyEmpWage(string companyName, int maxWorkingDay, int maxWorkingHrs, int empRate);
@@ -71,7 +72,7 @@ namespace EmployeeWage
 
             //int totalEmpWage = totalEmpHrs * this.empRatePerHour;
             //this.totalEmpWage = totalEmpWage;
-            //Console.WriteLine("\nTotal Employee wage for company  " + company + "  is "+ totalEmpWage);
+            //Console.WriteLine("\nTotal Employeee wage for company  " + company + "  is "+ totalEmpWage);
 
         }
     }

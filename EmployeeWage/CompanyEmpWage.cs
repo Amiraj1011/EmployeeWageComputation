@@ -8,12 +8,13 @@ namespace EmployeeWage
 {
     public class CompanyEmpWage
     {
+        //variable declaration
         private string company;
         public int empRatePerHour;
         public int numOfWorkingDays;
         public int maxHoursPerMonth;
         private int totalEmpWage;
-
+        
         public CompanyEmpWage(string company, int empRatePerHour, int numOfWorkingDays, int maxHoursPerMonth)
         {
             this.company = company;
@@ -29,7 +30,7 @@ namespace EmployeeWage
 
         public string toString()
         {
-            return "Total Employee Wage for company : " + this.company + " is " + this.totalEmpWage;
+            return "Total Employeee Wage for company : " + this.company + " is " + this.totalEmpWage;
 
         }
     }
