@@ -6,52 +6,68 @@ using System.Threading.Tasks;
 
 namespace EmployeeWage
 {
-    //Interface
+    //declaring interface class
     public interface IComputeEmpWage
     {
-        public void addCompanyEmpWage(string companyName, int maxWorkingDay, int maxWorkingHrs, int empRate);
+        public void addCompanyEmpWage(string company, int empRatePerHour, int numOfWorkingDays, int maxHourPerMonth);
         public void computeEmpWage();
+        public int getTotalWage(string company);
     }
-    public class EmpWageBuilderArray : IComputeEmpWage
+    //inheriting from the interfce class
+    public class EmpWageBuilder : IComputeEmpWage
     {
         public const int IS_FULL_TIME = 1;
         public const int IS_PART_TIME = 2;
 
-        private int numOfCompany = 0;
-        private CompanyEmpWage[] companyEmpWageArray;
+        //initialising the dictionary object with string as key and the companyempwage class as value
+        //initialising the Linkedlist of the referrence type CompanyEmpWage class which holds 
+        //all the data about the various variables in it.
+        private LinkedList<CompanyEmpWage> companyEmpWageList;
+        private Dictionary<string, CompanyEmpWage> companyToEmpWageMap;
+        
 
-        public EmpWageBuilderArray()
+        public EmpWageBuilder()
         {
-            this.companyEmpWageArray = new CompanyEmpWage[5];
+            this.companyEmpWageList = new LinkedList<CompanyEmpWage>();
+            this.companyToEmpWageMap = new Dictionary<string, CompanyEmpWage>();
         }
+
+
+    
         public void addCompanyEmpWage(string company, int empRatePerHour, int numOfWorkingDays, int maxHoursPerMonth)
         {
-            companyEmpWageArray[this.numOfCompany] = new CompanyEmpWage(company, empRatePerHour, numOfWorkingDays, maxHoursPerMonth);
-            numOfCompany++;
+            //creating emp wage object of the company emp wage class
+            CompanyEmpWage companyEmpWage = new CompanyEmpWage(company,empRatePerHour,numOfWorkingDays,maxHoursPerMonth); //creating emp wage object of the company emp wage class
+            this.companyEmpWageList.AddLast(companyEmpWage);
+            this.companyToEmpWageMap.Add(company, companyEmpWage);
+            //in the above lines of code we are putting the add methods in both the lisrt and dictionary
         }
 
         public void computeEmpWage()
         {
-            for (int i = 0; i < numOfCompany; i++)
+            foreach (CompanyEmpWage companyEmpWage in this.companyEmpWageList)
             {
-                companyEmpWageArray[i].setTotalEmpWage(this.computeEmpWage(this.companyEmpWageArray[i]));
-                Console.WriteLine(this.companyEmpWageArray[i].toString());
+                //this will fetch the companyEmpWage object from the list,and the ComputeEmpWage method will execute its with the help of the object's variable
+                companyEmpWage.setTotalEmpWage(this.ComputeEmpWage(companyEmpWage));    
+                Console.WriteLine(companyEmpWage.toString());
             }
         }
-
-
-
-        private int computeEmpWage(CompanyEmpWage companyEmpWage)
+        //similar method like compute emp wage that it fethces a single element and then finds out its respected emp wage
+        private int ComputeEmpWage(CompanyEmpWage company)
         {
+            //variables
+            int empWage = 0;
             int empHrs = 0;
             int totalWorkingDays = 0;
             int totalEmpHrs = 0;
 
-            while (totalEmpHrs <= companyEmpWage.maxHoursPerMonth && totalWorkingDays < companyEmpWage.numOfWorkingDays)
+            while (totalEmpHrs <= company.maxHoursPerMonth && totalWorkingDays < company.numOfWorkingDays)
             {
                 totalWorkingDays++;
+                //creating random object ob random class
                 Random random = new Random();
                 int empCheck = random.Next(0, 3);
+                //switch case for access employee type
                 switch (empCheck)
                 {
                     case IS_FULL_TIME:
@@ -64,16 +80,20 @@ namespace EmployeeWage
                         empHrs = 0;
                         break;
                 }
+                //Formulla for calculating employee wage
+                empWage = company.empRatePerHour * totalEmpHrs;
+                //formulla for calculating total emp wage
+                company.totalEmpWage = company.totalEmpWage + empWage;
                 totalEmpHrs += empHrs;
                 Console.WriteLine("Days#:" + totalWorkingDays + "Emp Hrs" + empHrs);
-
+             
             }
-            return totalEmpHrs * companyEmpWage.empRatePerHour;
-
-            //int totalEmpWage = totalEmpHrs * this.empRatePerHour;
-            //this.totalEmpWage = totalEmpWage;
-            //Console.WriteLine("\nTotal Employeee wage for company  " + company + "  is "+ totalEmpWage);
-
+            return company.totalEmpWage;
         }
+            public int getTotalWage(string company)
+            {
+                return this.companyToEmpWageMap[company].totalEmpWage;
+            }      
+        
     }
 }
